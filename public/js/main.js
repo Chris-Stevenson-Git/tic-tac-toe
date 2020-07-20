@@ -29,10 +29,7 @@ $('document').ready(function(){
 
 });//end of document ready
 
-if(localStorage.playerOne === undefined || localStorage.playerOne === null) {
-  localStorage.playerOne = 0;
-  localStorage.playerTwo = 0;
-}
+
 
 
 // ----------------------------- Add tokens to board -----------------------------

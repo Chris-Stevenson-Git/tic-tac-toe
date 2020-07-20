@@ -67,3 +67,10 @@ p {
 select {
   width: 50px;
 }
+
+.playerWinCounter {
+  font-size: 14px;
+  display: inline-block;
+  border: 3px dotted white;
+  padding: 6px;
+}

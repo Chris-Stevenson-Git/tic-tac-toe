@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Tic Tac Toe</title>
+    <script type="text/javascript" src='js/jquery.js'></script>
+    <script type="text/javascript" src='js/main.js'></script>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <h1>Tic-Tac-Toe</h1>
+    <p>Grid size:
+      <select id='gridSize'>
+        <option value=3>3</option>
+        <option value=4>4</option>
+        <option value=5>5</option>
+        <option value=6>6</option>
+        <option value=7>7</option>
+      </select>
+      <input type="button" id='start' value="Start">
+      <input type="button" id='reset' class='reset' value="Reset">
+    </p>
+    <div class="endGameMessage">
+      <p class='winMessage'></p>
+      <div class="winCounter">
+        <div class="playerWinCounter">
+          <p>Player One</p>
+          <p id='p1WinCount'></p>
+        </div>
+        <div class="playerWinCounter">
+          <p>Player two</p>
+          <p id='p2WinCount'></p>
+        </div>
+      </div>
+      <input type="button" class='reset' value="Reset Game">
+      <input type="button" class='resetWins' value="Reset Win Count">
+    </div>
+    <div class="grid-container"></div>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.16.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/7.16.1/firebase-analytics.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+  </body>
+</html>
