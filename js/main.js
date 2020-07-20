@@ -2,26 +2,29 @@
 $('document').ready(function(){
 
   //create the board
-  createGrid(5);
+  createGrid(3);
 
 
   // ----------------------------- Add tokens to board -----------------------------
-  $('.gridItem').on('click', function(eventObject) {
+  let turnSelect = 1;
+  $('.gridItem').on('click', function() {
     if($(this).hasClass('filled') === true) {
       alert('Please choose an unoccupied square.');
       return;
     }
-    if(eventObject.shiftKey) {
+    if(turnSelect % 2 === 0) {
       $(this).css({'background-image': "url('images/Token2.png')"});
       $(this).addClass('Player-Two filled')
+      turnSelect++;
     } else {
       $(this).css({'background-image': "url('images/Token1.png')"});
       $(this).addClass('Player-One filled')
+      turnSelect++;
     }
     winCheck(gridBoard);
-  });
+  });//end of add tokens to board function
 
-});
+});//end of document ready
 
 // ----------------------------- Create the board -----------------------------
 let gridBoard;
