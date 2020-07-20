@@ -17,6 +17,7 @@ $('document').ready(function(){
     loadClickFunction();
     $('.endGameMessage').css({'display': 'none'});
     turnSelect = 1;
+    drawCount = 0;
   });
 
 
@@ -66,6 +67,8 @@ const createGrid = function(number) {
 
 
 // ----------------------------- Win conditions -----------------------------
+//set counter to check if there are no moves left to make
+let drawCount = 0;
 //win checking function which takes grid board as an array.
 const winCheck = function(gridBoard){
   //horizontal 3
@@ -74,7 +77,6 @@ const winCheck = function(gridBoard){
     const previous = i-1;
     //only perform the operation in the same row
     if(i % rowLength != 0 && next % rowLength != 0){
-      console.log(`checking item ${i}`);
       //check if the previous and following tokens are the same
       if($(gridBoard[i]).hasClass(token) && $(gridBoard[next]).hasClass(token) && $(gridBoard[previous]).hasClass(token)) {
         endingMessage(token);
@@ -111,6 +113,7 @@ const winCheck = function(gridBoard){
       }
     }
   };
+
   //work out the dimensions of the board
   const rowLength = Math.sqrt(gridBoard.length);
   //Starting at 1 because I don't want to check the first box
@@ -129,11 +132,19 @@ const winCheck = function(gridBoard){
     verticalCheck(gridBoard, i, token);
     diagonalCheck(gridBoard, i, token);
   }
-
+  drawCount++;
+  if(drawCount === gridBoard.length) {
+    endingMessage('draw')
+  }
+  console.log('Draw Count ' + drawCount);
 };
 
 // ----------------------------- Ending Message -----------------------------
 const endingMessage = function(token) {
-  $('.winMessage').text(`${token} wins!`);
+  if(token === 'draw'){
+    $('.winMessage').text(`It's a draw!`);
+  } else {
+    $('.winMessage').text(`${token} wins!`);
+  }
   $('.endGameMessage').css({'display': 'block'});
 };
