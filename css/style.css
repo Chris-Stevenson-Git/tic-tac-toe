@@ -46,7 +46,7 @@
   font-size: 24px;
   text-align: center;
   color: white;
-  background-color: rgba(0,0,0,0.8);
+  background-color: black;
 }
 h1 {
   font-family: 'Fredericka the Great', cursive;
@@ -69,12 +69,9 @@ select {
 }
 
 .playerWinCounter {
-  margin-top: 8%;
+  font-family: fantasy;
+  font-size: 14px;
   display: inline-block;
   border: 3px dotted white;
   padding: 6px;
-}
-.playerWinCounter p {
-  font-size: 14px;
-  display: block;
 }
