@@ -30,3 +30,17 @@
   margin: 0;
   padding: 0;
 }
+
+.endGameMessage {
+  position: absolute;
+  padding-top: 20px;
+  z-index: 1;
+  top: 20%;
+  left: 10%;
+  height: 50%;
+  width: 80%;
+  font-size: 24px;
+  text-align: center;
+  color: white;
+  background-color: black;
+}

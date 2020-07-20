@@ -4,6 +4,12 @@ $('document').ready(function(){
   //create the board
   createGrid(3);
 
+  // ----------------------------- Winner Message -----------------------------
+  let messageContainer = document.createElement('div');
+  $(messageContainer).addClass('endGameMessage').prependTo($('.grid-container')).css({'display': 'none'});
+
+
+
 
   // ----------------------------- Add tokens to board -----------------------------
   let turnSelect = 1;
@@ -25,6 +31,8 @@ $('document').ready(function(){
   });//end of add tokens to board function
 
 });//end of document ready
+
+
 
 // ----------------------------- Create the board -----------------------------
 let gridBoard;
@@ -56,7 +64,7 @@ const winCheck = function(gridBoard){
       //check if the previous and following tokens are the same
       if($(gridBoard[i]).hasClass(token) && $(gridBoard[next]).hasClass(token) && $(gridBoard[previous]).hasClass(token)) {
         console.log(`triggered on ${i}`);
-        alert(`${token} wins!`);
+        $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
       }
     }
   };
@@ -68,7 +76,7 @@ const winCheck = function(gridBoard){
     if(i > (rowLength-1) && i < (gridBoard.length - rowLength)) {
       if($(gridBoard[i]).hasClass(token) && $(gridBoard[next]).hasClass(token) && $(gridBoard[previous]).hasClass(token)) {
         console.log(`triggered on ${i}`);
-        alert(`${token} wins!`);
+        $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
       }
     }
   };
@@ -84,11 +92,11 @@ const winCheck = function(gridBoard){
         const bottomRight = i+rowLength+1;
         if($(gridBoard[i]).hasClass(token) && $(gridBoard[topLeft]).hasClass(token) && $(gridBoard[bottomRight]).hasClass(token)) {
           console.log(`triggered on ${i}`);
-          alert(`${token} wins!`);
+          $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
         }
         if($(gridBoard[i]).hasClass(token) && $(gridBoard[topRight]).hasClass(token) && $(gridBoard[bottomLeft]).hasClass(token)) {
           console.log(`triggered on ${i}`);
-          alert(`${token} wins!`);
+          $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
         }
       }
     }
