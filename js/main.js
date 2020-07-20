@@ -145,7 +145,6 @@ const winCheck = function(gridBoard){
   if(drawCount === gridBoard.length) {
     endingMessage('draw')
   }
-  console.log('Draw Count ' + drawCount);
 };
 
 // ----------------------------- Setting localStorage of win counters -----------------------------

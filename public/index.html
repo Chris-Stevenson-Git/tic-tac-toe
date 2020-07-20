@@ -20,22 +20,24 @@
       <input type="button" id='start' value="Start">
       <input type="button" id='reset' class='reset' value="Reset">
     </p>
-    <div class="endGameMessage">
-      <p class='winMessage'></p>
-      <div class="winCounter">
-        <div class="playerWinCounter">
-          <p>Player One</p>
-          <p id='p1WinCount'></p>
+    <div class="gameContainer">      
+      <div class="endGameMessage">
+        <p class='winMessage'></p>
+        <div class="winCounter">
+          <div class="playerWinCounter">
+            <p>Player One</p>
+            <p id='p1WinCount'></p>
+          </div>
+          <div class="playerWinCounter">
+            <p>Player Two</p>
+            <p id='p2WinCount'></p>
+          </div>
         </div>
-        <div class="playerWinCounter">
-          <p>Player Two</p>
-          <p id='p2WinCount'></p>
-        </div>
+        <input type="button" class='reset' value="Reset Game">
+        <input type="button" class='resetWins' value="Reset Win Count">
       </div>
-      <input type="button" class='reset' value="Reset Game">
-      <input type="button" class='resetWins' value="Reset Win Count">
+      <div class="grid-container"></div>
     </div>
-    <div class="grid-container"></div>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="/__/firebase/7.16.1/firebase-app.js"></script>
 
