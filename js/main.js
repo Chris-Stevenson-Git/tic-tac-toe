@@ -1,18 +1,33 @@
 // ----------------------------- Load the game once the page has loaded.  -----------------------------
 $('document').ready(function(){
 
-  //create the board
-  createGrid(3);
+  // ----------------------------- Start & Reset Button -----------------------------
+  $('#start').on('click', function() {
+    const gridSize = $('#gridSize').val();
+    createGrid(gridSize);
+    loadClickFunction();
+    $('#reset').css({'display': 'inline'});
+    $(this).remove();
+  });
 
-  // ----------------------------- Winner Message -----------------------------
-  let messageContainer = document.createElement('div');
-  $(messageContainer).addClass('endGameMessage').prependTo($('.grid-container')).css({'display': 'none'});
+  $('.reset').on('click', function() {
+    $('.grid-container').html('');
+    const gridSize = $('#gridSize').val();
+    createGrid(gridSize);
+    loadClickFunction();
+    $('.endGameMessage').css({'display': 'none'});
+    turnSelect = 1;
+  });
+
+
+});//end of document ready
 
 
 
 
-  // ----------------------------- Add tokens to board -----------------------------
-  let turnSelect = 1;
+// ----------------------------- Add tokens to board -----------------------------
+let turnSelect = 1;
+const loadClickFunction = function() {
   $('.gridItem').on('click', function() {
     if($(this).hasClass('filled') === true) {
       alert('Please choose an unoccupied square.');
@@ -29,12 +44,11 @@ $('document').ready(function(){
     }
     winCheck(gridBoard);
   });//end of add tokens to board function
-
-});//end of document ready
-
+};
 
 
 // ----------------------------- Create the board -----------------------------
+//Gridboard is a variable to hold a jquery object of an array of every grid square
 let gridBoard;
 
 const createGrid = function(number) {
@@ -48,7 +62,7 @@ const createGrid = function(number) {
     }
   }
   gridBoard = $('.gridItem');
-};
+};//create grid function
 
 
 // ----------------------------- Win conditions -----------------------------
@@ -63,8 +77,7 @@ const winCheck = function(gridBoard){
       console.log(`checking item ${i}`);
       //check if the previous and following tokens are the same
       if($(gridBoard[i]).hasClass(token) && $(gridBoard[next]).hasClass(token) && $(gridBoard[previous]).hasClass(token)) {
-        console.log(`triggered on ${i}`);
-        $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
+        endingMessage(token);
       }
     }
   };
@@ -75,8 +88,7 @@ const winCheck = function(gridBoard){
     //check everything except the top and bottom rows
     if(i > (rowLength-1) && i < (gridBoard.length - rowLength)) {
       if($(gridBoard[i]).hasClass(token) && $(gridBoard[next]).hasClass(token) && $(gridBoard[previous]).hasClass(token)) {
-        console.log(`triggered on ${i}`);
-        $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
+        endingMessage(token);
       }
     }
   };
@@ -91,12 +103,10 @@ const winCheck = function(gridBoard){
         const bottomLeft = i+rowLength-1;
         const bottomRight = i+rowLength+1;
         if($(gridBoard[i]).hasClass(token) && $(gridBoard[topLeft]).hasClass(token) && $(gridBoard[bottomRight]).hasClass(token)) {
-          console.log(`triggered on ${i}`);
-          $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
+          endingMessage(token);
         }
         if($(gridBoard[i]).hasClass(token) && $(gridBoard[topRight]).hasClass(token) && $(gridBoard[bottomLeft]).hasClass(token)) {
-          console.log(`triggered on ${i}`);
-          $('.endGameMessage').text(`${token} wins!`).css({'display': 'block'});
+          endingMessage(token);
         }
       }
     }
@@ -120,4 +130,10 @@ const winCheck = function(gridBoard){
     diagonalCheck(gridBoard, i, token);
   }
 
+};
+
+// ----------------------------- Ending Message -----------------------------
+const endingMessage = function(token) {
+  $('.winMessage').text(`${token} wins!`);
+  $('.endGameMessage').css({'display': 'block'});
 };
