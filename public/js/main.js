@@ -1,6 +1,29 @@
 // ----------------------------- Load the game once the page has loaded.  -----------------------------
 $('document').ready(function(){
 
+  // ----------------------------- Authentication -----------------------------
+
+  //Signs the user in as anonymous
+  firebase.auth().signInAnonymously().catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+  //sets userId to the anonymous
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      var isAnonymous = user.isAnonymous;
+      var uid = user.uid;
+      // ...
+    } else {
+      // User is signed out.
+      // ...
+    }
+    // ...
+  });
+
   // ----------------------------- Start & Reset Button -----------------------------
   $('#start').on('click', function() {
     const gridSize = $('#gridSize').val();
@@ -21,22 +44,29 @@ $('document').ready(function(){
   });
 
   $('.resetWins').on('click', function(){
-    localStorage.playerOne = 0;
-    localStorage.playerTwo = 0;
-    $('#p1WinCount').text(localStorage.playerOne)
-    $('#p2WinCount').text(localStorage.playerTwo)
+    winCounter.update({
+      'playerOne': 0,
+      'playerTwo': 0,
+    });
   });
 
-  const database = firebase.firestore();
-  const winCounter = database.collection('gameData').doc('winCounter');
-  winCounter.get().then(function(doc) {
-    console.log(doc.data());
+  // ----------------------------- Set the global variables to the firestore database -----------------------
+  database = firebase.firestore();
+  winCounter = database.collection('gameData').doc('winCounter');
+
+  // ----------------------------- Listen to changes in data -----------------------------
+  console.log(winCounter);
+  winCounter.onSnapshot(function(doc) {
+    $('#p2WinCount').text(doc.data()['playerTwo']);
+    $('#p1WinCount').text(doc.data()['playerOne']);
   });
+
+
 });//end of document ready
 
 
-
-
+let database;
+let winCounter;
 
 
 // ----------------------------- Add tokens to board -----------------------------
@@ -149,7 +179,6 @@ const winCheck = function(gridBoard){
   if(drawCount === gridBoard.length) {
     endingMessage('draw')
   }
-  console.log('Draw Count ' + drawCount);
 };
 
 
@@ -160,13 +189,20 @@ const endingMessage = function(token) {
   } else {
     $('.winMessage').text(`${token} wins!`);
     if(token === 'Player-One'){
-      localStorage.playerOne = parseInt(localStorage.playerOne) + 1;
+      winCounter.get().then(function(doc) {
+        const newWinCount = doc.data()['playerOne'] + 1;
+        database.collection('gameData').doc('winCounter').update({
+          'playerOne': newWinCount,
+        });
+      });
     } else {
-      localStorage.playerTwo = parseInt(localStorage.playerTwo) + 1;
+      winCounter.get().then(function(doc) {
+        const newWinCount = doc.data()['playerTwo'] + 1;
+        database.collection('gameData').doc('winCounter').update({
+          'playerTwo': newWinCount,
+        });
+      });
     }
-    $('#p1WinCount').text(localStorage.playerOne)
-    $('#p2WinCount').text(localStorage.playerTwo)
-
   }
   $('.endGameMessage').css({'display': 'block'});
 };
