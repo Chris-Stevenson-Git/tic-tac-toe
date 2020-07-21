@@ -27,7 +27,14 @@ $('document').ready(function(){
     $('#p2WinCount').text(localStorage.playerTwo)
   });
 
+  const database = firebase.firestore();
+  const winCounter = database.collection('gameData').doc('winCounter');
+  winCounter.get().then(function(doc) {
+    console.log(doc.data());
+  });
 });//end of document ready
+
+
 
 
 
@@ -145,9 +152,6 @@ const winCheck = function(gridBoard){
   console.log('Draw Count ' + drawCount);
 };
 
-// ----------------------------- Setting localStorage of win counters -----------------------------
-// localStorage.playerOne = 0;
-// localStorage.playerTwo = 0;
 
 // ----------------------------- Ending Message -----------------------------
 const endingMessage = function(token) {

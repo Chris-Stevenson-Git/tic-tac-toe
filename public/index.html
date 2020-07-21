@@ -20,7 +20,7 @@
       <input type="button" id='start' value="Start">
       <input type="button" id='reset' class='reset' value="Reset">
     </p>
-    <div class="gameContainer">      
+    <div class="gameContainer">
       <div class="endGameMessage">
         <p class='winMessage'></p>
         <div class="winCounter">
@@ -37,15 +37,30 @@
         <input type="button" class='resetWins' value="Reset Win Count">
       </div>
       <div class="grid-container"></div>
-    </div>
+    </div>cd
     <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="/__/firebase/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
          https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="/__/firebase/7.16.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
+    <script src="/__/firebase/7.16.1/firebase-firestore.js"></script>
 
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyBBw596p71Tanz6HMYBEzRploSvj_kT9gQ",
+        authDomain: "tic-tac-toe-ec2d6.firebaseapp.com",
+        databaseURL: "https://tic-tac-toe-ec2d6.firebaseio.com",
+        projectId: "tic-tac-toe-ec2d6",
+        storageBucket: "tic-tac-toe-ec2d6.appspot.com",
+        messagingSenderId: "279289665974",
+        appId: "1:279289665974:web:b6d1a63e124d722d45c917",
+        measurementId: "G-R8BPQY3905"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
   </body>
 </html>
