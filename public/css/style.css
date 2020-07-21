@@ -68,7 +68,7 @@ p {
 }
 
 #reset {
-  display: none;
+  display: inline;
 }
 
 select {

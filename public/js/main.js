@@ -23,26 +23,33 @@ $('document').ready(function(){
     }
     // ...
   });
+  // ----------------------------- Set the global variables to the firestore database -----------------------
+  database = firebase.firestore();
+  winCounter = database.collection('gameData').doc('winCounter');
+  theBoard = database.collection('gameData').doc('theBoard');
+  playerTurn = database.collection('gameData').doc('playerTurn');
+  resetWatcher = database.collection('gameData').doc('resetWatcher');
 
-  // ----------------------------- Start & Reset Button -----------------------------
-  $('#start').on('click', function() {
-    const gridSize = $('#gridSize').val();
-    createGrid(gridSize);
-    loadClickFunction();
-    $('#reset').css({'display': 'inline'});
-    $(this).remove();
+
+  // ----------------------------- code to init a board -----------------------------
+  //Take the size of the board that already exists on firebase and make one for yourself.
+  theBoard.get().then(function(doc) {
+    createGrid(doc.data()['gridSize']);
+    updateBoard();
   });
 
+  // ----------------------------- click  handlers -----------------------------
+  //On click of any reset button it changes the resetWatcher value in the database which will trigger a listener working in any browser window
   $('.reset').on('click', function() {
-    $('.grid-container').html('');
-    const gridSize = $('#gridSize').val();
-    createGrid(gridSize);
-    loadClickFunction();
-    $('.endGameMessage').css({'display': 'none'});
-    turnSelect = 1;
-    drawCount = 0;
+    let randomNum = Math.random() * Number.MAX_VALUE;
+    resetWatcher.update({
+      'yesReset': randomNum,
+    });
+    console.log('Clicked Reset');
+    console.log(randomNum);
   });
 
+  //Just reset the win counter
   $('.resetWins').on('click', function(){
     winCounter.update({
       'playerOne': 0,
@@ -50,68 +57,196 @@ $('document').ready(function(){
     });
   });
 
-  // ----------------------------- Set the global variables to the firestore database -----------------------
-  database = firebase.firestore();
-  winCounter = database.collection('gameData').doc('winCounter');
+  $("select").change(function() {
+    let selectVal = $(this).val();
+    theBoard.update({
+      'gridSize': selectVal,
+    });
+  });
+
 
   // ----------------------------- Listen to changes in data -----------------------------
-  console.log(winCounter);
+  //listening to changes in win counter
   winCounter.onSnapshot(function(doc) {
+    //update the values of player 1 and 2 win counts
     $('#p2WinCount').text(doc.data()['playerTwo']);
     $('#p1WinCount').text(doc.data()['playerOne']);
+    //Make sure the win message matches the victor
+    $('.winMessage').text(doc.data()['winMessage']);
+    //change the display type of the end game message to either show or hide
+    $('.endGameMessage').css({'display': doc.data()['display']});
   });
+
+  //listening to changing positions in the board
+  //any time a square changes values, update the board across browsers and check if the game has been won.
+  theBoard.onSnapshot(function() {
+    updateBoard();
+    winCheck(gridBoard);
+  });
+
+  //Listening to if the board has been reset
+  resetWatcher.onSnapshot(function() {
+    theBoard.get().then(function(doc){
+      //clear out the grid container
+      $('.grid-container').html('');
+
+      winCounter.update({
+        'display': 'none',
+      });
+
+      playerTurn.update({
+        'playerOneTurn': true,
+      });
+
+      theBoard.get().then(function(doc){
+        //reset the database boardState
+        theBoard.update({
+          'boardState': [],
+        });
+        blankBoardArray = [];
+        //create the new grid
+        createGrid(doc.data()['gridSize']);
+      });
+    });//theBoard.get()
+  });//resetWatcher
+
+
 
 
 });//end of document ready
 
-
-let database;
-let winCounter;
-
-
-// ----------------------------- Add tokens to board -----------------------------
-let turnSelect = 1;
+// ----------------------------- click function to add token to board-----------------------------
 const loadClickFunction = function() {
   $('.gridItem').on('click', function() {
+    console.log('clicked');
     if($(this).hasClass('filled') === true) {
       alert('Please choose an unoccupied square.');
       return;
     }
-    if(turnSelect % 2 === 0) {
-      $(this).css({'background-image': "url('images/Token2.png')"});
-      $(this).addClass('Player-Two filled')
-      turnSelect++;
-    } else {
-      $(this).css({'background-image': "url('images/Token1.png')"});
-      $(this).addClass('Player-One filled')
-      turnSelect++;
-    }
-    winCheck(gridBoard);
-  });//end of add tokens to board function
+    let thisGridItem = this;
+    playerTurn.get().then(function(doc) {
+      if(doc.data()['playerOneTurn'] === false) {
+        $(thisGridItem).addClass('Player-Two filled')
+        playerTurn.update({
+          'playerOneTurn': true,
+        });
+        theBoard.get().then(function(doc) {
+          let boardState = doc.data()['boardState'];
+          boardState[gridBoard.index(thisGridItem)] = 2;
+          theBoard.update({
+            'boardState': boardState,
+          });
+        });
+      } else {
+        $(thisGridItem).addClass('Player-One filled')
+        playerTurn.update({
+          'playerOneTurn': false,
+        });
+        theBoard.get().then(function(doc) {
+          let boardState = doc.data()['boardState'];
+          boardState[gridBoard.index(thisGridItem)] = 1;
+          theBoard.update({
+            'boardState': boardState,
+          });
+        });
+      }//else
+    });//playerTurn.get()
+  });//end of on click function
+}//end of loadClickFunction
+
+
+// ----------------------------- Update the board -----------------------------
+//This is a function that loops through the boardState array held in the database and populates the squares with the correct images.
+const updateBoard = function() {
+  theBoard.get().then(function(doc){
+    for (let i = 0; i < doc.data()['boardState'].length; i++) {
+      if(doc.data()['boardState'][i] === 1) {
+        $(gridBoard[i]).css({'background-image': "url('images/Token1.png')"});
+        $(gridBoard[i]).addClass('Player-One filled')
+      } else if (doc.data()['boardState'][i] === 2) {
+        $(gridBoard[i]).css({'background-image': "url('images/Token2.png')"});
+        $(gridBoard[i]).addClass('Player-Two filled')
+      } else if (doc.data()['boardState'][i] === 0) {
+        $(gridBoard[i]).css({'background-image': "none"});
+      }
+    }//for loop
+  })
 };
+
+// ----------------------------- global variables to access the database in functions -----------------------
+let database;
+let winCounter;
+let playerTurn;
+let resetWatcher;
+
+
+// ----------------------------- Add tokens to board -----------------------------
+$('.gridItem').on('click', function() {
+  if($(this).hasClass('filled') === true) {
+    alert('Please choose an unoccupied square.');
+    return;
+  }
+  let thisGridItem = this;
+  playerTurn.get().then(function(doc) {
+    if(doc.data()['playerOneTurn'] === false) {
+      theBoard.get().then(function(doc) {
+        playerTurn.update({
+          'playerOneTurn': true,
+        });
+        let boardState = doc.data()['boardState'];
+        boardState[gridBoard.index(thisGridItem)] = 2;
+        theBoard.update({
+          'boardState': boardState,
+        });
+      });
+    } else {
+      theBoard.get().then(function(doc) {
+        playerTurn.update({
+          'playerOneTurn': false,
+        });
+        let boardState = doc.data()['boardState'];
+        boardState[gridBoard.index(thisGridItem)] = 1;
+        theBoard.update({
+          'boardState': boardState,
+        });
+      });
+    }//else
+  });//playerTurn.get()
+});//end of on click function
 
 
 // ----------------------------- Create the board -----------------------------
-//Gridboard is a variable to hold a jquery object of an array of every grid square
+//Gridboard is a variable to hold a jquery object of an array of every grid square so that I can check it in the checkWin function
 let gridBoard;
+let blankBoardArray = [];
 
+//function which takes in a number and gives a grid of that number's square.
 const createGrid = function(number) {
+  blankBoardArray = [];
   const squareNum = number**2;
   for (var i = 1; i <= squareNum; i++) {
     let gridItem = document.createElement('div');
     $(gridItem).addClass('gridItem').css({'width': `${100/number}%`, 'height': `${100/number}%`}).appendTo($('.grid-container'));
+    console.log('pushing to array');
+    blankBoardArray.push(0);
+    //when i hits a modulus of argument number, create an empty div which just forces the grid items to start a new row
     if(i % number === 0) {
       let gridBreak = document.createElement('div');
       $(gridBreak).addClass('gridBreak').appendTo($('.grid-container'))
     }
   }
+  theBoard.update({
+    'boardState': blankBoardArray,
+  });
+  console.log('Triggered');
+  //gridBoard is equal to every div with a class of gridItem
   gridBoard = $('.gridItem');
+  //load click function so the new divs can accept clicks
+  loadClickFunction();
 };//create grid function
 
 
 // ----------------------------- Win conditions -----------------------------
-//set counter to check if there are no moves left to make
-let drawCount = 0;
 //win checking function which takes grid board as an array.
 const winCheck = function(gridBoard){
   //horizontal 3
@@ -175,34 +310,44 @@ const winCheck = function(gridBoard){
     verticalCheck(gridBoard, i, token);
     diagonalCheck(gridBoard, i, token);
   }
-  drawCount++;
-  if(drawCount === gridBoard.length) {
-    endingMessage('draw')
-  }
+  //Check the board array to see if it's devoid of unfilled squares.
+  theBoard.get().then(function(doc) {
+    //if no empty squares, but at least one filled square
+    if(doc.data()['boardState'].includes(0) === false && doc.data()['boardState'].includes(1) === true){
+      endingMessage('draw')
+    }
+  });
 };
 
 
 // ----------------------------- Ending Message -----------------------------
+//function which takes token as arg. Token is the class name of the X or O
 const endingMessage = function(token) {
   if(token === 'draw'){
-    $('.winMessage').text(`It's a draw!`);
+    winCounter.update({
+      'winMessage': `It's a draw!`,
+    });
   } else {
-    $('.winMessage').text(`${token} wins!`);
+    winCounter.update({
+      'winMessage': `${token} wins!`,
+    });
     if(token === 'Player-One'){
       winCounter.get().then(function(doc) {
         const newWinCount = doc.data()['playerOne'] + 1;
-        database.collection('gameData').doc('winCounter').update({
+        winCounter.update({
           'playerOne': newWinCount,
         });
       });
     } else {
       winCounter.get().then(function(doc) {
         const newWinCount = doc.data()['playerTwo'] + 1;
-        database.collection('gameData').doc('winCounter').update({
+        winCounter.update({
           'playerTwo': newWinCount,
         });
       });
     }
   }
-  $('.endGameMessage').css({'display': 'block'});
+  winCounter.update({
+    'display': 'block',
+  });
 };
