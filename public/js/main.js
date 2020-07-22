@@ -112,7 +112,7 @@ function handleSignUp() {
     if (errorCode == 'auth/weak-password') {
       alert('The password is too weak.');
     } else {
-      alert(errorMessage);
+      alert('This Username already exists. Please login or choose a new Username');
     }
     console.log(error);
     // [END_EXCLUDE]
