@@ -19,3 +19,7 @@ Once signed in, your signed in status should update and the page will load the g
 You must now choose one or both of the positions to play and you can get started!
 
 The game will track how many games each player has won and will reset the count if the current user pairing changes.
+
+You have the option to select a grid side and on reset it will update all players' board with the new size. Same rules of needing three in a row to win apply. 
+
+![alt text](https://i.imgur.com/e2KcSNS.png)
