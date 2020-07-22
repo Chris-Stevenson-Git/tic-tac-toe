@@ -8,6 +8,38 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
+    <div>
+      <div>
+        <h2>Login to play!</h2>
+      </div>
+      <div>
+        <input style="display:inline;width:auto;" type="text" id="email" name="email" placeholder="Username"/>
+        &nbsp;&nbsp;&nbsp;
+        <br/><br/>
+        <button disabled id="quickstart-sign-in" name="signin">Sign In</button>
+        &nbsp;&nbsp;&nbsp;
+        <button id="quickstart-sign-up" name="signup">Sign Up</button>
+        &nbsp;&nbsp;&nbsp;
+
+        <!-- Container where we'll display the user details -->
+        <div class="quickstart-user-details-container">
+          Sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
+          <pre><code id="quickstart-account-details">null</code></pre>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="playerSelect" id='playerOneSelect'>
+      <h3>Player One</h3>
+      <h6>Click to change me!</h6>
+      <h4 id='playerOneTag'>None</h4>
+    </div>
+    <div class="playerSelect" id='playerTwoSelect'>
+      <h3>Player Two</h3>
+      <h6>Click to change me!</h6>
+      <h4 id='playerTwoTag'>None</h4>
+    </div>
     <h1>Tic-Tac-Toe</h1>
     <p>Grid size:
       <select id='gridSize'>
