@@ -198,11 +198,19 @@ const gameInit = function(){
     playerTurn.update({
       'setPlayerOne': playerName,
     });
+    winCounter.update({
+      'playerOne': 0,
+      'playerTwo': 0,
+    });
   });
 
   $('#playerTwoSelect').on('click', function(){
     playerTurn.update({
       'setPlayerTwo': playerName,
+    });
+    winCounter.update({
+      'playerOne': 0,
+      'playerTwo': 0,
     });
   });
 
@@ -454,25 +462,35 @@ const endingMessage = function(token) {
   //update the winCounter values in the database
   else if(token === 'token1'){
     winCounter.get().then(function(doc) {
-      const newWinCount = doc.data()['playerOne'] + 1;
+      let newWinCount = doc.data()['playerOne'];
       playerTurn.get().then(function(doc) {
-        winCounter.update({
-          'playerOne': newWinCount,
-          'winMessage': `${doc.data()['setPlayerOne']} wins!`,
-        });
+        if(doc.data()['setPlayerOne'] === playerName) {
+          newWinCount = newWinCount + 1;
+          winCounter.update({
+            'playerOne': newWinCount,
+            'winMessage': `${doc.data()['setPlayerOne']} wins!`,
+          });
+        }
       });
     });
   } else if(token === 'token2'){
     winCounter.get().then(function(doc) {
-      const newWinCount = doc.data()['playerTwo'] + 1;
+      let newWinCount = doc.data()['playerTwo'];
       playerTurn.get().then(function(doc) {
-        winCounter.update({
-          'playerTwo': newWinCount,
-          'winMessage': `${doc.data()['setPlayerTwo']} wins!`,
-        });
+        if(doc.data()['setPlayerTwo'] === playerName) {
+          newWinCount = newWinCount + 1;
+          winCounter.update({
+            'playerTwo': newWinCount,
+            'winMessage': `${doc.data()['setPlayerTwo']} wins!`,
+          });
+        }
       });
     });
   }
+  playerTurn.get().then(function(doc){
+    $('#p1Name').text(doc.data()['setPlayerOne']);
+    $('#p2Name').text(doc.data()['setPlayerTwo']);
+  });
   //Show the end of game message
   winCounter.update({
     'display': 'block',

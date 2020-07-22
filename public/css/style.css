@@ -5,6 +5,13 @@
 
 *{
   box-sizing: border-box;
+  color: white;
+}
+
+body {
+  background-image: url('/images/background.jpg');
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 .grid-container {
@@ -57,7 +64,7 @@
   background-color: rgba(0,0,0,0.7);
 }
 h1 {
-  font-family: 'Fredericka the Great', cursive;
+  font-family: 'Press Start 2P', cursive;
   font-size: 52px;
   text-align: center;
 }
@@ -74,6 +81,13 @@ p {
 
 select {
   width: 50px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+}
+
+input, button {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
 }
 
 .playerWinCounter {
@@ -91,6 +105,91 @@ pre {
   display: none;
 }
 
+.playerSelectContainer {
+  top: 70px;
+  font-size: 16px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50vh;
+  height: 50px;
+}
+
 .playerSelect {
-  border: 10px solid black;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  position: relative;
+  display: block;
+  width: 15vw;
+  height: 70px;
+  margin-left: 1.5vw;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  margin-top: 10px;
+}
+
+.playerSelect h3, .playerSelect h4 {
+  margin: 5px auto;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  margin-top: 13px;
+}
+
+.sideBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 70vh;
+  width: 18vw;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  border-right: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom-right-radius: 60px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#playerSelectText {
+  font-size: 14px;
+  width: 15vw;
+  margin: 1.5vw;
+}
+
+.loginInfo {
+  font-family: 'Press Start 2P', cursive;
+}
+
+.loginInfo h2 {
+  font-size: 14px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+.quickstart-user-details-container {
+  font-size: 12px;
+  text-align: center;
+  top: 55px;
+  position: relative;
+}
+#quickstart-sign-in-status {
+  font-size: 10px;
+}
+#email {
+  position: absolute;
+  top: 40px;
+  left: 5px;
+  display: block;
+  width: auto;
+}
+#quickstart-sign-up {
+  position: absolute;
+  margin: 0;
+  top: 70px;
+  left: 80px;
+  display: inline-block;
+}
+#quickstart-sign-in {
+  position: absolute;
+  margin: 0;
+  top: 70px;
+  left: 5px;
+  display: inline-block;
 }
