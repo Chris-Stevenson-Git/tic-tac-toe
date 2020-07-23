@@ -123,17 +123,6 @@ function handleSignUp() {
 // ----------------------------- Load the game once the page has loaded.  -----------------------------
 const gameInit = function(){
 
-
-      /**
-       * initApp handles setting up UI event listeners and registering Firebase auth listeners:
-       *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
-       *    out, and that is where we update the UI.
-       */
-
-
-
-  // ----------------------------- END OF AUTH -----------------------------
-
   // ----------------------------- Set the global variables to the firestore database -----------------------
   database = firebase.firestore();
   winCounter = database.collection('gameData').doc('winCounter');

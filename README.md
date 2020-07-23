@@ -10,6 +10,9 @@ The game is live and hosted on [Firebase](https://tic-tac-toe-ec2d6.web.app/)
 ## How it was built
 The Game has been built in HTML, CSS, JavaScript and jQuery. User authentication and live multiplayer through Google Firebase.
 
+## Biggest learn
+The DOM window is NOT a database and shouldn't be treated as such. My first iteration of the game wrote data to the DOM and then would read the DOM to check the win conditions and anything else that needed to be checked. Almost every function needed to be re-written to varying degrees when I migrated to the cloud. In future I will ensure that data is held in variables and any DOM functions are only accessing those variables and not the source of the data itself. 
+
 
 ## How to play
 On login each user must make a username and signup. Returning users can simply sign back in with a previously created username.
