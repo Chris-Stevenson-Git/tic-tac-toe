@@ -454,13 +454,8 @@ const winCheck = function(gridBoard){
 //function which takes token as arg. Token is the class name of the X or O
 const endingMessage = function(token) {
   //update the win message in the database
-  if(token === 'draw'){
-    winCounter.update({
-      'winMessage': `It's a draw!`,
-    });
-  }
   //update the winCounter values in the database
-  else if(token === 'token1'){
+  if(token === 'token1'){
     winCounter.get().then(function(doc) {
       let newWinCount = doc.data()['playerOne'];
       playerTurn.get().then(function(doc) {
@@ -486,7 +481,11 @@ const endingMessage = function(token) {
         }
       });
     });
-  }
+  }  else if(token === 'draw'){
+      winCounter.update({
+        'winMessage': `It's a draw!`,
+      });
+    }
   playerTurn.get().then(function(doc){
     $('#p1Name').text(doc.data()['setPlayerOne']);
     $('#p2Name').text(doc.data()['setPlayerTwo']);
